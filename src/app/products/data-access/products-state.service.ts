@@ -1,6 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { signalSlice } from 'ngxtension/signal-slice';
-import { catchError, finalize, map, of, startWith, Subject, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  map,
+  of,
+  startWith,
+  Subject,
+  switchMap,
+} from 'rxjs';
 
 import { IStateProducts, Status } from '../../shared/interfaces';
 
@@ -18,7 +25,6 @@ export class ProductsStateService {
   changePage$ = new Subject<number>();
 
   loadProducts$ = this.changePage$.pipe(
-    tap((page) => console.log('page', page)),
     startWith(1), // start with page 1 and automatically is triggered by changePage$
     switchMap((page) => this.productsService.getProducts(page)),
     map((products) => ({
@@ -30,10 +36,9 @@ export class ProductsStateService {
       return of({
         products: [],
         status: 'error' as Status,
-      })
+      });
     }),
-    finalize(() => console.log('finalize')), // when this observable is completed, log finalize;,
-  )
+  );
 
   state = signalSlice({
     initialState: this.initialState,

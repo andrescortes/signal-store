@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ProductsStateService } from '../../data-access';
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
-import { IProduct, Status } from '../../../shared/interfaces';
+import { CartStateService } from '../../../shared/data-access';
+import { IProduct } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-product-list',
@@ -13,13 +14,17 @@ import { IProduct, Status } from '../../../shared/interfaces';
 })
 export default class ProductListComponent {
   readonly productsStateService = inject(ProductsStateService);
-
-  constructor() {}
+  cartStateService = inject(CartStateService);
 
   changePage() {
-    console.log('changePage');
-
     const page = this.productsStateService.state.page() + 1;
     this.productsStateService.changePage$.next(page);
+  }
+
+  addProductToCart(product: IProduct) {
+    this.cartStateService.state.addToCart({
+      product,
+      quantity: 1,
+    });
   }
 }

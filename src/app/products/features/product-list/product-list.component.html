@@ -42,6 +42,7 @@
           <app-product-card
             class="block"
             [product]="product"
+            (addToCart)="addProductToCart($event)"
           ></app-product-card>
         }
       </div>
